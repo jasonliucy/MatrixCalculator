@@ -69,11 +69,27 @@ data class Matrix(
 
     fun transpose(): Matrix = Matrix((0..<numColumns).map { getColumn(it) })
 
-    fun ref(): Matrix {
+    fun ref(): Matrix = refHelper().first
+
+    fun invertible(): Boolean = numRows == numColumns
+
+    fun det(): Double {
+        if (invertible()) {
+            return (0..<numRows).fold(1.0) { acc, diag ->
+                acc * ref()[diag][diag]
+            } * refHelper().second
+        } else {
+            throw UnsupportedOperationException()
+        }
+    }
+
+    private fun refHelper(): Pair<Matrix, Double> {
+        var det = 1.0
         var m = Matrix(matrix)
         for (row in 0..<numRows) {
             val rowWithMaxFirst: Int = (row..<numRows).maxBy { abs(m[it][row]) }
             m = swapRows(m, row, rowWithMaxFirst)
+            det *= -1
 
             for (otherRow in row + 1..<numRows) {
                 val factor: Double = m[otherRow][row] / m[row][row]
@@ -81,7 +97,7 @@ data class Matrix(
                 m[otherRow][row] = 0.0
             }
         }
-        return m
+        return Pair(m, det)
     }
 
     private fun swapRows(
@@ -119,13 +135,14 @@ data class Matrix(
 operator fun Double.times(other: Matrix): Matrix = other * this
 
 fun main() {
-    println(
+    val m =
         Matrix(
             listOf(
-                Vector(listOf(1.0, 2.0, 3.0, 4.0)),
-                Vector(listOf(4.0, 1.0, 3.0, 4.0)),
-                Vector(listOf(2.0, 1.0, 2.0, 4.0)),
+                Vector(listOf(1.0, 2.0, 3.0)),
+                Vector(listOf(4.0, 1.0, 3.0)),
+                Vector(listOf(2.0, 1.0, 2.0)),
             ),
-        ).ref(),
-    )
+        ).ref()
+    println(m)
+    println(m.det())
 }
