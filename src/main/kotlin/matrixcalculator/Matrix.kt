@@ -133,16 +133,3 @@ data class Matrix(
 }
 
 operator fun Double.times(other: Matrix): Matrix = other * this
-
-fun main() {
-    val m =
-        Matrix(
-            listOf(
-                Vector(listOf(1.0, 2.0, 3.0)),
-                Vector(listOf(4.0, 1.0, 3.0)),
-                Vector(listOf(2.0, 1.0, 2.0)),
-            ),
-        ).ref()
-    println(m)
-    println(m.det())
-}

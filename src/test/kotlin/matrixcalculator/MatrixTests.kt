@@ -1,5 +1,6 @@
 package matrixcalculator
 
+import org.junit.jupiter.api.Assertions.assertTrue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -321,5 +322,49 @@ class MatrixTests {
         assertEquals(2, result.size)
         assertEquals(row1, result[0])
         assertEquals(row2, result[1])
+    }
+
+    @Test
+    fun `test determinant`() {
+        val m =
+            Matrix(
+                listOf(
+                    Vector(listOf(1.0, 2.0, 3.0)),
+                    Vector(listOf(4.0, 1.0, 3.0)),
+                    Vector(listOf(2.0, 1.0, 2.0)),
+                ),
+            ).ref()
+        assertEquals(1.0, m.det(), 0.000001)
+    }
+
+    @Test
+    fun `test invertible`() {
+        val m =
+            Matrix(
+                listOf(
+                    Vector(listOf(1.0, 2.0, 3.0)),
+                    Vector(listOf(4.0, 1.0, 3.0)),
+                    Vector(listOf(2.0, 1.0, 2.0)),
+                ),
+            ).ref()
+        assertTrue(m.invertible())
+    }
+
+    @Test
+    fun `cannot find determinant for non-square matrix`() {
+        val m =
+            Matrix(
+                listOf(
+                    Vector(listOf(1.0, 2.0)),
+                    Vector(listOf(4.0, 1.0)),
+                    Vector(listOf(2.0, 1.0)),
+                ),
+            ).ref()
+        try {
+            m.det()
+            fail("UnsupportedOperationException was expected")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
     }
 }

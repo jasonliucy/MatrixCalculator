@@ -183,7 +183,7 @@ class VectorTests {
 
     @Test
     fun `test magnitude`() {
-        assertEquals(10.0, Vector(listOf(6.0, 8.0)).magnitude())
+        assertEquals(10.0, Vector(listOf(6.0, 8.0)).magnitude(), 0.000001)
     }
 
     @Test
@@ -191,6 +191,6 @@ class VectorTests {
         val v1 = Vector(listOf(1.0, 2.0, 3.0))
         val v2 = Vector(listOf(3.0, 4.0, 5.0))
 
-        assertEquals(0.1862387659, v1 angleWith v2, 0.1)
+        assertEquals(0.1862387659, v1 angleWith v2, 0.000001)
     }
 }
