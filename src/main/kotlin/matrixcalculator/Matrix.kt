@@ -2,7 +2,7 @@ package matrixcalculator
 
 data class Matrix(
     private val matrix: List<Vector>,
-) {
+) : Iterable<Vector> {
     init {
         if (matrix.isEmpty() || matrix.any { it.length != matrix[0].length }) {
             throw IllegalArgumentException()
@@ -24,14 +24,14 @@ data class Matrix(
         column: Int,
     ): Double = matrix[row][column]
 
-    infix operator fun plus(other: Matrix): Matrix =
+    operator fun plus(other: Matrix): Matrix =
         if (this.numRows == other.numRows && this.numColumns == other.numColumns) {
             Matrix(this.matrix.zip(other.matrix, Vector::plus))
         } else {
             throw UnsupportedOperationException()
         }
 
-    infix operator fun times(other: Matrix): Matrix {
+    operator fun times(other: Matrix): Matrix {
         if (this.numColumns == other.numRows) {
             return Matrix(
                 matrix
@@ -47,7 +47,7 @@ data class Matrix(
         }
     }
 
-    infix operator fun times(scalar: Double) = Matrix(matrix.map { it * scalar })
+    operator fun times(scalar: Double) = Matrix(matrix.map { it * scalar })
 
     override fun toString(): String {
         val columnWidth: List<Int> =
@@ -67,7 +67,7 @@ data class Matrix(
         }
     }
 
-    operator fun iterator(): Iterator<Vector> = matrix.iterator()
+    override operator fun iterator(): Iterator<Vector> = matrix.iterator()
 }
 
 operator fun Double.times(other: Matrix) = other * this

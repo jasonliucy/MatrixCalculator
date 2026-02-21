@@ -2,7 +2,7 @@ package matrixcalculator
 
 data class Vector(
     private val vector: List<Double>,
-) {
+) : Iterable<Double> {
     init {
         if (vector.isEmpty()) {
             throw IllegalArgumentException()
@@ -14,14 +14,14 @@ data class Vector(
 
     operator fun get(index: Int): Double = vector[index]
 
-    infix operator fun plus(other: Vector): Vector =
+    operator fun plus(other: Vector): Vector =
         if (this.length == other.length) {
             Vector(this.vector.zip(other.vector, Double::plus))
         } else {
             throw UnsupportedOperationException()
         }
 
-    infix operator fun times(scalar: Double): Vector = Vector(vector.map { it * scalar })
+    operator fun times(scalar: Double): Vector = Vector(vector.map { it * scalar })
 
     infix fun dot(other: Vector): Double =
         if (this.length == other.length) {
@@ -32,7 +32,7 @@ data class Vector(
 
     override fun toString(): String = vector.joinToString(", ", "(", ")")
 
-    operator fun iterator(): Iterator<Double> = vector.iterator()
+    override operator fun iterator(): Iterator<Double> = vector.iterator()
 }
 
 operator fun Double.times(other: Vector) = other * this
