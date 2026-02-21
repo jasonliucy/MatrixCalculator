@@ -1,5 +1,7 @@
 package matrixcalculator
 
+import kotlin.math.abs
+
 data class Matrix(
     private val matrix: List<Vector>,
 ) : Iterable<Vector> {
@@ -25,6 +27,13 @@ data class Matrix(
         row: Int,
         column: Int,
     ): Double = matrix[row][column]
+
+    operator fun set(
+        row: Int,
+        vector: Vector,
+    ) {
+        (matrix as MutableList<Vector>)[row] = vector
+    }
 
     operator fun plus(other: Matrix): Matrix =
         if (this.numRows == other.numRows && this.numColumns == other.numColumns) {
@@ -60,6 +69,32 @@ data class Matrix(
 
     fun transpose(): Matrix = Matrix((0..<numColumns).map { getColumn(it) })
 
+    fun ref(): Matrix {
+        var m = Matrix(matrix)
+        for (row in 0..<numRows) {
+            val rowWithMaxFirst: Int = (row..<numRows).maxBy { abs(m[it][row]) }
+            m = swapRows(m, row, rowWithMaxFirst)
+
+            for (otherRow in row + 1..<numRows) {
+                val factor: Double = m[otherRow][row] / m[row][row]
+                m[otherRow] = m[otherRow] - factor * m[row]
+                m[otherRow][row] = 0.0
+            }
+        }
+        return m
+    }
+
+    private fun swapRows(
+        m: Matrix,
+        r1: Int,
+        r2: Int,
+    ): Matrix {
+        val temp = m[r1]
+        m[r1] = m[r2]
+        m[r2] = temp
+        return m
+    }
+
     override fun toString(): String {
         val columnWidth: List<Int> =
             (0..<numColumns).map { column ->
@@ -82,3 +117,15 @@ data class Matrix(
 }
 
 operator fun Double.times(other: Matrix): Matrix = other * this
+
+fun main() {
+    println(
+        Matrix(
+            listOf(
+                Vector(listOf(1.0, 2.0, 3.0, 4.0)),
+                Vector(listOf(4.0, 1.0, 3.0, 4.0)),
+                Vector(listOf(2.0, 1.0, 2.0, 4.0)),
+            ),
+        ).ref(),
+    )
+}

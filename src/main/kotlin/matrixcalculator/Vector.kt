@@ -17,6 +17,13 @@ data class Vector(
 
     operator fun get(index: Int): Double = vector[index]
 
+    operator fun set(
+        index: Int,
+        n: Double,
+    ) {
+        (vector as MutableList<Double>)[index] = n
+    }
+
     operator fun plus(other: Vector): Vector =
         if (this.length == other.length) {
             Vector(this.vector.zip(other.vector, Double::plus))
