@@ -17,6 +17,8 @@ data class Matrix(
 
     operator fun get(row: Int): Vector = matrix[row]
 
+    fun getRow(row: Int): Vector = this[row]
+
     fun getColumn(column: Int): Vector = Vector(matrix.map { it[column] })
 
     operator fun get(
@@ -47,7 +49,9 @@ data class Matrix(
         }
     }
 
-    operator fun times(scalar: Double) = Matrix(matrix.map { it * scalar })
+    operator fun times(scalar: Double): Matrix = Matrix(matrix.map { it * scalar })
+
+    fun transpose(): Matrix = Matrix((0..<numColumns).map { getColumn(it) })
 
     override fun toString(): String {
         val columnWidth: List<Int> =
@@ -70,4 +74,4 @@ data class Matrix(
     override operator fun iterator(): Iterator<Vector> = matrix.iterator()
 }
 
-operator fun Double.times(other: Matrix) = other * this
+operator fun Double.times(other: Matrix): Matrix = other * this

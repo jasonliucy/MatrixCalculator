@@ -30,6 +30,10 @@ data class Vector(
             throw UnsupportedOperationException()
         }
 
+    infix fun outer(other: Vector): Matrix = Matrix(listOf(this)).transpose() * Matrix(listOf(other))
+
+    infix fun perpendicular(other: Vector): Boolean = this dot other == 0.0
+
     override fun toString(): String = vector.joinToString(", ", "(", ")")
 
     override operator fun iterator(): Iterator<Double> = vector.iterator()
