@@ -33,6 +33,13 @@ data class Matrix(
             throw UnsupportedOperationException()
         }
 
+    operator fun minus(other: Matrix): Matrix =
+        if (this.numRows == other.numRows && this.numColumns == other.numColumns) {
+            Matrix(this.matrix.zip(other.matrix, Vector::minus))
+        } else {
+            throw UnsupportedOperationException()
+        }
+
     operator fun times(other: Matrix): Matrix {
         if (this.numColumns == other.numRows) {
             return Matrix(

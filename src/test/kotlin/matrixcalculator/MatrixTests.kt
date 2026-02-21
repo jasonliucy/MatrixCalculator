@@ -149,6 +149,38 @@ class MatrixTests {
     }
 
     @Test
+    fun `matrix subtraction`() {
+        val m1 = Matrix(listOf(Vector(listOf(1.0, 2.0)), Vector(listOf(3.0, 4.0))))
+        val m2 = Matrix(listOf(Vector(listOf(9.0, 7.0)), Vector(listOf(5.0, 3.0))))
+        val difference = Matrix(listOf(Vector(listOf(-8.0, -5.0)), Vector(listOf(-2.0, 1.0))))
+        assertEquals(difference, m1 - m2)
+    }
+
+    @Test
+    fun `exception - subtract matrices with different row counts`() {
+        val m1 = Matrix(listOf(Vector(listOf(1.0, 1.0)), Vector(listOf(1.0, 1.0))))
+        val m2 = Matrix(listOf(Vector(listOf(1.0, 1.0))))
+        try {
+            m1 - m2
+            fail("UnsupportedOperationException was expected")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
+    }
+
+    @Test
+    fun `exception - subtract matrices with different column counts`() {
+        val m1 = Matrix(listOf(Vector(listOf(1.0, 1.0))))
+        val m2 = Matrix(listOf(Vector(listOf(1.0, 1.0, 1.0))))
+        try {
+            m1 - m2
+            fail("UnsupportedOperationException was expected")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
+    }
+
+    @Test
     fun `matrix multiplication`() {
         val m1 =
             Matrix(

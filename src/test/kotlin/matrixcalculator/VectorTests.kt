@@ -90,6 +90,24 @@ class VectorTests {
     }
 
     @Test
+    fun `subtraction works`() {
+        val v1 = Vector(listOf(1.0, 0.0, 4.0))
+        val v2 = Vector(listOf(2.0, 1.0, 0.0))
+        val difference = Vector(listOf(-1.0, -1.0, 4.0))
+        assertEquals(difference, v1 - v2)
+    }
+
+    @Test
+    fun `exception - lengths do not match in subtraction`() {
+        try {
+            Vector(listOf(1.0, 2.0)) - Vector(listOf(1.0, 2.0, 3.0))
+            fail("UnsupportedOperationException was expected.")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
+    }
+
+    @Test
     fun `iterate over vector elements`() {
         val v1 = Vector(listOf(1.0, 2.0, 3.0))
         val result = mutableListOf<Double>()
@@ -116,8 +134,6 @@ class VectorTests {
                     Vector(listOf(12.0, 15.0)),
                 ),
             )
-        println(v1)
-        println(Matrix(listOf(v2)).transpose())
 
         assertEquals(m, v1 outer v2)
     }
@@ -128,5 +144,53 @@ class VectorTests {
         val v2 = Vector(listOf(-1.0, 1.0))
 
         assertTrue(v1 perpendicular v2)
+    }
+
+    @Test
+    fun `test cross product`() {
+        val v1 = Vector(listOf(1.0, 2.0, 3.0))
+        val v2 = Vector(listOf(3.0, 4.0, 5.0))
+        val v3 = Vector(listOf(-2.0, 4.0, -2.0))
+
+        assertEquals(v3, v1 cross v2)
+    }
+
+    @Test
+    fun `cannot perform cross product on vectors not of size 3`() {
+        val v1 = Vector(listOf(1.0, 2.0))
+        val v2 = Vector(listOf(3.0, 4.0))
+
+        try {
+            v1 cross v2
+            fail("UnsupportedOperationException was expected.")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
+    }
+
+    @Test
+    fun `cannot perform cross product on vectors not of the same size`() {
+        val v1 = Vector(listOf(1.0, 2.0, 3.0))
+        val v2 = Vector(listOf(3.0, 4.0))
+
+        try {
+            v1 cross v2
+            fail("UnsupportedOperationException was expected.")
+        } catch (exception: UnsupportedOperationException) {
+            // Good: exception was expected.
+        }
+    }
+
+    @Test
+    fun `test magnitude`() {
+        assertEquals(10.0, Vector(listOf(6.0, 8.0)).magnitude())
+    }
+
+    @Test
+    fun `test angle between vectors`() {
+        val v1 = Vector(listOf(1.0, 2.0, 3.0))
+        val v2 = Vector(listOf(3.0, 4.0, 5.0))
+
+        assertEquals(0.1862387659, v1 angleWith v2, 0.1)
     }
 }
